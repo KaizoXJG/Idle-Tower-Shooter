@@ -10,17 +10,22 @@ public class Spawner : MonoBehaviour
     public Vector2 towerPos = Vector2.zero;
     public float safeRadius = 1f;
     public GameObject tower;
+    TowerStats tStats;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        tStats = tower.GetComponent<TowerStats>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        SpawnEnemy();
+        if (!tStats.isGameOver)
+        {
+            SpawnEnemy();
+        }
+        
     }
     public void SpawnEnemy()
     {

@@ -140,6 +140,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyInfo
   spawnRotation: {x: 0, y: 0, z: 0, w: 1}
+  unitDamage: 1
 --- !u!114 &6169258500530123614
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -152,6 +153,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 784c21b1b5c00d1429022066dfd338f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyMovementBasic
+  tower: {fileID: 0}
+  speed: 1
+  towerDangerZone: 1.5
 --- !u!1 &7922510878608063325
 GameObject:
   m_ObjectHideFlags: 0
@@ -231,7 +235,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 7
   m_MaskInteraction: 0
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
   m_Color: {r: 0, g: 1, b: 0.4980392, a: 1}

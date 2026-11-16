@@ -7,16 +7,23 @@ public class EnemyMovementBasic : MonoBehaviour
     public float speed = 1f;
     //bool isOnTower = false;
     public float towerDangerZone = 1f;
+    TowerStats tStats; 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        tStats = tower.GetComponent<TowerStats>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        MoveEnemy();
+        if (!tStats.isGameOver)
+        {
+            MoveEnemy();
+            Detectbreech();
+        }
+        
+        
     }
     void MoveEnemy()
     {/*   manual path Calculation
@@ -33,7 +40,17 @@ public class EnemyMovementBasic : MonoBehaviour
             Vector3 direction = path.normalized;  // a unit vector in the same direction as the given vector 'path'
             transform.position += direction * speed * Time.deltaTime;
         }
-        
-        
+    }
+    void Detectbreech()
+    {
+        if (Vector2.Distance(transform.position, tower.transform.position)<= towerDangerZone  )
+        {
+            if(tStats.towerHealth > 0)
+            {
+                tStats.towerHealth -= gameObject.GetComponent<EnemyInfo>().unitDamage;
+            }
+           
+            Destroy(gameObject);
+        }
     }
 }
