@@ -11,31 +11,35 @@ public class Spawner : MonoBehaviour
     public float safeRadius = 1f;
     public GameObject tower;
     TowerStats tStats;
+    public float spawnDelay = 1f;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         tStats = tower.GetComponent<TowerStats>();
+        InvokeRepeating("SpawnEnemy",0f,spawnDelay);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!tStats.isGameOver)
-        {
-            SpawnEnemy();
-        }
+        
+        
         
     }
     public void SpawnEnemy()
     {
-        int spawnIndex = Random.Range(0, enemyList.Length);
-        do
+        if (!tStats.isGameOver)
         {
-            spawnPos = new Vector2(Random.Range(-5f, 5f), Random.Range(-4f, 4f));
-        } while (Vector2.Distance(spawnPos, towerPos) < safeRadius);
-        GameObject enemy=Instantiate(enemyList[spawnIndex], spawnPos, enemyList[spawnIndex].GetComponent<EnemyInfo>().spawnRotation);
-        enemy.GetComponent<EnemyMovementBasic>().tower = tower;
+            int spawnIndex = Random.Range(0, enemyList.Length);
+            do
+            {
+                spawnPos = new Vector2(Random.Range(-10f, 10f), Random.Range(-6f, 6f));
+            } while (Vector2.Distance(spawnPos, towerPos) < safeRadius);
+            GameObject enemy = Instantiate(enemyList[spawnIndex], spawnPos, enemyList[spawnIndex].GetComponent<EnemyInfo>().spawnRotation);
+            enemy.GetComponent<EnemyMovementBasic>().tower = tower;
+        }
+        
 
 
     }
