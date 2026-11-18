@@ -54,9 +54,10 @@ public class TowerAttack : MonoBehaviour
             {
                 GameObject attack = Instantiate(attacks[i], transform.position, attacks[i].GetComponent<AttackInfo>().spawnRotation);
                 attack.GetComponent<StraightProjectileMovement>().towerAtk = this;
+                attack.GetComponent<DamageEnemy>().towerAtk = this;
             }
             //Debug.Log("Attacking" + enemyList[0].name);
-            enemy.unitHP -= tStats.towerDamage;
+            //enemy.unitHP -= tStats.towerDamage;
             if (enemy.unitHP <= 0)
             {
                 enemyList.Remove(enemy); //it is destroyed here cause sometimes Destroy() doesn't remove the object during same frame rather it is marked for deconstruction for next frame , this can cause null exception as we are trying to access a element which might not exist
