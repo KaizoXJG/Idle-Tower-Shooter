@@ -10,7 +10,7 @@ public class TowerAttack : MonoBehaviour
     public Vector2 towerPos;
     public delegate int targettingFunction(List<EnemyInfo> enemyList);
     public targettingFunction CurrentTargetIndexFunction;
-    public EnemyInfo currentTarget;
+    public EnemyInfo currentTarget = null;
     public List<GameObject> attacks = new List<GameObject>();
 
 
@@ -18,17 +18,18 @@ public class TowerAttack : MonoBehaviour
     void Start()
     {
         tStats = GetComponent<TowerStats>();
-        InvokeRepeating("DamageClosestEnemy", 0f, tStats.towerAttackSpeed);
+        InvokeRepeating("DamageCurrentEnemy", 0f, tStats.towerAttackSpeed);
         towerPos = tStats.transform.position;
         
     }
     void Update()
     {
         GetComponent<CircleCollider2D>().radius = tStats.towerRange;
-        CurrentTargetIndexFunction = ClosestEnemyIndex;
-        if (enemyList.Count > 0)
+        CurrentTargetIndexFunction = RandomEnemyIndex;
+        if (enemyList.Count > 0 && currentTarget==null)
         {
-            currentTarget = enemyList[CurrentTargetIndexFunction(enemyList)];
+            //currentTarget = enemyList[CurrentTargetIndexFunction(enemyList)];
+            TargetCurrentEnemy();
         }
 
 
@@ -46,7 +47,7 @@ public class TowerAttack : MonoBehaviour
     }
 
 
-    void DamageEnemy(EnemyInfo enemy)
+    void DamageCurrentEnemy()
     {
         if (enemyList.Count > 0)
         {
@@ -58,11 +59,11 @@ public class TowerAttack : MonoBehaviour
             }
             //Debug.Log("Attacking" + enemyList[0].name);
             //enemy.unitHP -= tStats.towerDamage;
-            if (enemy.unitHP <= 0)
+            /*if (currentTarget.unitHP <= 0)
             {
-                enemyList.Remove(enemy); //it is destroyed here cause sometimes Destroy() doesn't remove the object during same frame rather it is marked for deconstruction for next frame , this can cause null exception as we are trying to access a element which might not exist
-                Destroy(enemy.gameObject);
-            }
+                enemyList.Remove(currentTarget); //it is destroyed here cause sometimes Destroy() doesn't remove the object during same frame rather it is marked for deconstruction for next frame , this can cause null exception as we are trying to access a element which might not exist
+                Destroy(currentTarget.gameObject);
+            }*/
         }
         
     }
@@ -80,12 +81,31 @@ public class TowerAttack : MonoBehaviour
         }
         return closestIndex;
     }
-    void DamageClosestEnemy()  //to pass a parameterless function to InvokeRepeating
+    public int FarthestEnemyIndex(List<EnemyInfo> enemyList)
     {
-        if (enemyList.Count > 0)
+        int farthestIndex = 0;
+        float greatestDist = 0f;
+        for (int i = 0; i < enemyList.Count; i++)
         {
-            DamageEnemy(enemyList[ClosestEnemyIndex(enemyList)]);
+            if (Vector2.Distance(towerPos, enemyList[i].transform.position) > greatestDist)
+            {
+                farthestIndex = i;
+                greatestDist = Vector2.Distance(towerPos, enemyList[i].transform.position);
+            }
+        }
+        return farthestIndex;
+    }
+    public int RandomEnemyIndex(List<EnemyInfo> enemyList)
+    {
+        return UnityEngine.Random.Range(0,(enemyList.Count));
+    }
+    void TargetCurrentEnemy()  //to pass a parameterless function to InvokeRepeating
+    {
+        if (enemyList.Count > 0 && currentTarget == null)
+        {
+            currentTarget =  enemyList[CurrentTargetIndexFunction(enemyList)];
         }
     }
+
 
 }

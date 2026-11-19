@@ -28,6 +28,17 @@ public class DamageEnemy : MonoBehaviour
             enemyCollided.unitHP -= unitStats.attackDamage;
 
         }
+        EnemyInfo enemy = collision.gameObject.GetComponent<EnemyInfo>();
+        if (enemy.unitHP <= 0)
+        {
+            towerAtk.enemyList.Remove(enemy); //it is destroyed here cause sometimes Destroy() doesn't remove the object during same frame rather it is marked for deconstruction for next frame , this can cause null exception as we are trying to access a element which might not exist
+            Destroy(enemy.gameObject);
+            if(enemy = towerAtk.currentTarget)
+            {
+                towerAtk.currentTarget = null;
+            }
+        }
+        
         Destroy(gameObject);
 
 
